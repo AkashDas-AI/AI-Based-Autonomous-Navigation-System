@@ -61,41 +61,41 @@ flowchart TD
     PRE --> DET
     DET --> ADAPT
     CAM --> ADAPT
-    ADAPT -->|Perceived Occupancy Updates| MAP
+    ADAPT -->|"Perceived Occupancy Updates"| MAP
     SCENARIO --> MAP
     SCENARIO --> DYNOBS
     MAP --> INFLATE
     INFLATE --> ASTAR
-    ASTAR -->|Planned Path| WM
+    ASTAR -->|"Planned Path"| WM
 
-    ROBOT -->|True Physical State| SUITE
+    ROBOT -->|"True Physical State"| SUITE
     SUITE --> ODOM
     SUITE --> IMU
     SUITE --> GNSS
-    ODOM -->|v_meas| EKF
-    IMU -->|omega_meas| EKF
-    GNSS -->|x_meas, y_meas (1 Hz)| EKF
+    ODOM -->|"v_meas"| EKF
+    IMU -->|"omega_meas"| EKF
+    GNSS -->|"x_meas, y_meas (1 Hz)"| EKF
     EKF --> COV
-    EKF -->|Estimated State| FDBK
-    ROBOT -->|Ground Truth State| FDBK
+    EKF -->|"Estimated State"| FDBK
+    ROBOT -->|"Ground Truth State"| FDBK
 
-    FDBK -->|Feedback State x, y, theta, v| WM
-    FDBK -->|Feedback State| CTRL
-    FDBK -->|Feedback State| DWA
-    WM -->|Lookahead Sub-Goal| CTRL
-    WM -->|Lookahead Sub-Goal| DWA
-    MAP -->|Static Grid| DWA
-    DYNOBS -->|Predicted Trajectories| DWA
-    CTRL -.->|v_cmd, omega_cmd (Mode: Pure Pursuit)| ROBOT
-    DWA -->|v_cmd, omega_cmd (Mode: DWA)| ROBOT
+    FDBK -->|"Feedback State (x, y, theta, v)"| WM
+    FDBK -->|"Feedback State"| CTRL
+    FDBK -->|"Feedback State"| DWA
+    WM -->|"Lookahead Sub-Goal"| CTRL
+    WM -->|"Lookahead Sub-Goal"| DWA
+    MAP -->|"Static Grid"| DWA
+    DYNOBS -->|"Predicted Trajectories"| DWA
+    CTRL -.->|"v_cmd, omega_cmd (Mode: Pure Pursuit)"| ROBOT
+    DWA -->|"v_cmd, omega_cmd (Mode: DWA)"| ROBOT
 
-    ROBOT -->|True State| ENGINE
-    DYNOBS -->|Advance Obstacles| ENGINE
+    ROBOT -->|"True State"| ENGINE
+    DYNOBS -->|"Advance Obstacles"| ENGINE
     ENGINE --> COLLISION
-    COLLISION -->|Collision Status strictly from True Pose| ENGINE
-    ENGINE -->|True vs Estimated Trajectory History| METRICS
-    ENGINE -->|Execution History| LOGGER
-    ENGINE -->|Execution History| PLOT
+    COLLISION -->|"Collision Status strictly from True Pose"| ENGINE
+    ENGINE -->|"True vs Estimated Trajectory History"| METRICS
+    ENGINE -->|"Execution History"| LOGGER
+    ENGINE -->|"Execution History"| PLOT
 ```
 
 ---
