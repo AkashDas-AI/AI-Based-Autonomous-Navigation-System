@@ -28,5 +28,5 @@ Thank you for your interest in contributing to the **AI-Based Autonomous Navigat
 
 ## 4. License Notice
 
-Licensing terms are maintained by the project owner. Contributions are submitted under the project's prospective open-source terms.
+Licensing terms are maintained by the project owner, Akash Das. Contributions are submitted under the project's MIT License terms.
 
