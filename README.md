@@ -158,8 +158,7 @@ AI-Based Autonomous Navigation System/
 │   ├── results.md             # Benchmark scores and error analysis across static and dynamic scenarios
 │   ├── limitations.md         # Planar assumptions, kinematics scope, and known boundaries
 │   ├── roadmap.md             # Progressive development milestones (Perception, GUI, DWA, CARLA)
-│   ├── execution_log.md       # Chronological milestone log and test verification tracker
-│   └── [01-06]_*.md           # Advanced theoretical & multi-sensor system specifications
+│   └── execution_log.md       # Chronological milestone log and test verification tracker
 ├── images/                    # Curated visual evidence for documentation & showcase
 │   ├── .gitkeep               # Directory tracker
 │   ├── calibration_sensitivity_diagnostic.png

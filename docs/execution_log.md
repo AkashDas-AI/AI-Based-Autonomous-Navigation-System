@@ -9,12 +9,7 @@ This log maintains a chronological record of all architectural decisions, module
 - **Status**: Completed
 - **Implemented Scope**:
   - Established dedicated documentation repository under [`docs/`](.).
-  - Drafted comprehensive system architecture in [`01_system_architecture.md`](01_system_architecture.md).
-  - Defined end-to-end multi-rate data flow pipeline in [`02_data_flow_and_pipeline.md`](02_data_flow_and_pipeline.md).
-  - Outlined detailed module boundaries and interfaces in [`03_module_specifications.md`](03_module_specifications.md).
-  - Documented dataset modalities, benchmarks, and augmentation pipelines in [`04_datasets_and_benchmarks.md`](04_datasets_and_benchmarks.md).
-  - Specified model learning mechanics, neural network architecture, and loss formulations in [`05_model_learning_and_training.md`](05_model_learning_and_training.md).
-  - Established multi-tiered testing protocols and quantitative pass/fail thresholds in [`06_validation_and_testing_framework.md`](06_validation_and_testing_framework.md).
+  - Drafted initial conceptual blueprints for system architecture, multi-rate data pipelines, module specifications, datasets, and verification protocols (subsequently superseded by active implementation documentation in [`architecture.md`](architecture.md), [`methodology.md`](methodology.md), [`testing.md`](testing.md), and [`results.md`](results.md)).
 - **Validation Criteria**:
   - All files in `docs/` cross-linked and verified for structural consistency.
   - Ready for module-by-module implementation starting with foundational core types and state estimation.

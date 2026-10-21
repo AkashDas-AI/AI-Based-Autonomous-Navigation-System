@@ -65,6 +65,10 @@ coverage.xml
 Thumbs.db
 desktop.ini
 
+# Personal interview preparation and study materials (local only, do not commit or push)
+docs/interview_*.md
+docs/*interview*
+
 # Output artifacts from runs (keep directory structure via README)
 outputs/figures/*
 outputs/logs/*
