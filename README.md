@@ -500,5 +500,5 @@ This project is open-source software made available under the terms of the **MIT
 
 Contributions, bug reports, and suggestions are welcome. Please refer to [CONTRIBUTING.md](CONTRIBUTING.md) for details on code style, typing standards, and testing policies before opening a pull request.
 
-- **Author**: Autonomous Systems Team
+- **Author**: Akash Das
 - **Issue Tracker**: Use the GitHub repository issue tracker to report defects or propose enhancements.

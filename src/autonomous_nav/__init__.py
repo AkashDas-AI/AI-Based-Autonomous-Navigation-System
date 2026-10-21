@@ -6,7 +6,7 @@ waypoint tracking, collision detection, and performance evaluation.
 """
 
 __version__ = "0.1.0"
-__author__ = "Autonomous Systems Team"
+__author__ = "Akash Das"
 
 from autonomous_nav.config import (
     SimulationConfig,
