@@ -1,0 +1,6 @@
+# Core runtime dependencies for AI-Based Autonomous Navigation System
+numpy>=1.24.0
+matplotlib>=3.7.0
+opencv-python>=4.8.0
+pygame>=2.5.0
+

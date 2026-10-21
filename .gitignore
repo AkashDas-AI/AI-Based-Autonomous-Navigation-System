@@ -1,0 +1,93 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Unit test / coverage / cache directories
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+.pip_cache/
+.matplotlib/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# IDE / Editor configurations
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Output artifacts from runs (keep directory structure via README)
+outputs/figures/*
+outputs/logs/*
+outputs/metrics/*
+outputs/*_backup/
+!outputs/figures/.gitkeep
+!outputs/logs/.gitkeep
+!outputs/metrics/.gitkeep
+!outputs/README.md
+
+# Temporary data caches
+data/maps/*.tmp
+data/samples/*.tmp
+!data/README.md
+!data/maps/.gitkeep
+!data/samples/.gitkeep
+
+# Real-world dataset archives and raw files
+*.tgz
+*.tar.gz
+*.bag
+data/tum_rgbd/*
+!data/tum_rgbd/README.md
+!data/tum_rgbd/.gitkeep
+
+
