@@ -496,8 +496,10 @@ Automated tests confirmed agreement within $10^{-5}\text{ m}$.
 
 ### 11.5 Audited Depth-Pixel Statistics Reconciliation
 Every authentic 16-bit depth image has exactly $480 \times 640 = 307,200\text{ pixels}$.
-- **Reconciliation Check 1**: $\text{zero\_depth\_pixels} + \text{out\_of\_range\_pixels} + \text{valid\_depth\_pixels} = 307,200$.
-- **Reconciliation Check 2**: $\text{floor\_rejected\_points} (Z_b < 0.05\text{m}) + \text{ceiling\_rejected\_points} (Z_b > 1.20\text{m}) + \text{retained\_obstacle\_points} = \text{valid\_depth\_pixels}$.
+- **Reconciliation Check 1**:
+  $$\text{ZeroDepthPixels} + \text{OutOfRangePixels} + \text{ValidDepthPixels} = 307{,}200$$
+- **Reconciliation Check 2**:
+  $$\text{FloorRejectedPoints} + \text{CeilingRejectedPoints} + \text{RetainedObstaclePoints} = \text{ValidDepthPixels}$$
 
 | Frame Filename | File Size | Valid Pixels ($[0.4, 5.0]\text{m}$) | Zero Depth ($0\text{m}$) | Out-of-Range ($<0.4\text{m}$ / $>5.0\text{m}$) | Invalid Total | Floor Rej. ($<0.05\text{m}$) | Ceiling Rej. ($>1.20\text{m}$) | Retained Obstacles | Check 1 / Check 2 |
 |---|---|---|---|---|---|---|---|---|---|

@@ -36,7 +36,7 @@ This directory houses real-world robotics dataset assets for the **AI-Based Auto
 - **Distortion Coefficients:** $k_1 = 0.2312, k_2 = -0.7849, p_1 = -0.0033, p_2 = -0.0001, k_3 = 0.9172$
 - **Distortion Handling**: Per official TUM documentation, depth images are pre-registered to the color camera using the OpenNI PrimeSense driver; pinhole back-projection uses $(f_x, f_y, c_x, c_y)$ without separate radial lens undistortion.
 - **Depth Scale Factor:** `5000.0`
-  $$\text{Depth (meters)} = \frac{\text{raw\_uint16}}{5000.0}$$
+  $$\text{Depth (meters)} = \frac{\text{raw uint16}}{5000.0}$$
 - **Valid Depth Range:** $[0.40, 5.00]\text{ m}$ (near-field $<0.4\text{ m}$ and far-field $>5.0\text{ m}$ rejected).
 - **Obstacle Height Filter:** $Z_b \in [0.05, 1.20]\text{ m}$ (floor $<0.05\text{ m}$ and ceiling $>1.20\text{ m}$ rejected).
 
@@ -89,8 +89,8 @@ data/tum_rgbd/
 
 ## 5. Audited Depth-Pixel Statistics Reconciliation
 Every 16-bit depth image has exactly $480 \times 640 = 307,200\text{ pixels}$.
-- **Reconciliation Check 1**: $\text{zero\_depth\_pixels} + \text{out\_of\_range\_pixels} + \text{valid\_depth\_pixels} = 307,200$.
-- **Reconciliation Check 2**: $\text{floor\_rejected\_points} + \text{ceiling\_rejected\_points} + \text{retained\_obstacle\_points} = \text{valid\_depth\_pixels}$.
+- **Reconciliation Check 1**: $$\text{ZeroDepthPixels} + \text{OutOfRangePixels} + \text{ValidDepthPixels} = 307{,}200$$.
+- **Reconciliation Check 2**: $$\text{FloorRejectedPoints} + \text{CeilingRejectedPoints} + \text{RetainedObstaclePoints} = \text{ValidDepthPixels}$$.
 
 | Frame Filename | File Size | Valid Pixels ($[0.4, 5.0]\text{m}$) | Zero Depth ($0\text{m}$) | Out-of-Range ($<0.4\text{m}$ / $>5.0\text{m}$) | Invalid Total | Floor Rej. ($<0.05\text{m}$) | Ceiling Rej. ($>1.20\text{m}$) | Retained Obstacles | Check 1 / Check 2 |
 |---|---|---|---|---|---|---|---|---|---|
