@@ -4,98 +4,81 @@
 
 The **AI-Based Autonomous Navigation System** is organized as a decoupled, modular simulation platform designed for deterministic safety, rapid prototyping, and reproducible benchmarking.
 
+![System Architecture Overview](../images/system_architecture.png)
+
 ```mermaid
 flowchart TD
-    subgraph Perc["Perception Subsystem (OpenCV)"]
-        IMG["SyntheticImageRenderer / Camera"]
-        PRE["Preprocessing (Bilateral/Gaussian, Norm)"]
-        DET["ObstacleDetector (Otsu, Morph, Contours)"]
-        CAM["OrthographicCamera / PlanarPerspectiveCamera"]
-        ADAPT["MapAdapter (Grid Synchronization)"]
+    %% 1. Ingestion
+    subgraph SENSORS ["1. Sensory Acquisition & Benchmark Ingestion"]
+        ODO["Wheel Odometry<br/>(Gaussian Noise)"]
+        IMU["IMU Gyroscope<br/>(Random Walk Drift)"]
+        GNSS["GNSS Fixes<br/>(1 Hz Decimated)"]
+        RGBD["Authentic TUM RGB-D<br/>(16-bit Depth PNGs)"]
     end
 
-    subgraph Env["Environment Subsystem"]
-        MAP["GridMap (2D Occupancy)"]
-        DYNOBS["DynamicObstacleManager (Moving Obstacles & Prediction)"]
-        SCENARIO["Scenario Loader (Static & Dynamic Benchmarks)"]
+    %% 2. Perception & Mapping
+    subgraph PERCEPTION ["2. Perception & Metric Grid Mapping"]
+        CV["OpenCV Pipeline<br/>(Otsu & Contours)"]
+        PROJ["3D Pinhole Unprojection<br/>& Height Slicing"]
+        GRID["2D Occupancy GridMap<br/>(0.05m / 0.1m Resolution)"]
+        INFLATE["Distance Transform<br/>Obstacle Inflation"]
+        
+        RGBD --> PROJ --> GRID
+        CV --> GRID
+        GRID --> INFLATE
     end
 
-    subgraph Plan["Planning Subsystem"]
-        ASTAR["AStarPlanner (8-Connected with Corner-Cut Guard)"]
-        INFLATE["Obstacle Inflation Layer"]
+    %% 3. Global Planning & Guidance
+    subgraph PLANNING ["3. Global Path Planning & Guidance"]
+        ASTAR["A* Global Planner<br/>(8-Connected + Corner Guard)"]
+        WPM["Waypoint Manager<br/>(Lookahead Progression)"]
+        
+        INFLATE --> ASTAR --> WPM
     end
 
-    subgraph Sens["Sensors Subsystem"]
-        ODOM["WheelOdometrySensor (Velocity Noise & Scale Error)"]
-        IMU["IMUSensor (Angular Rate White Noise & Bias Drift)"]
-        GNSS["GNSSReceiver (1 Hz Position Fixes & Outage Windows)"]
-        SUITE["SensorSuite (Deterministic RNG Stream)"]
+    %% 4. State Estimation
+    subgraph ESTIMATION ["4. State Estimation & Sensor Fusion"]
+        EKF["5-State Extended Kalman Filter<br/>(x, y, theta, v, omega)"]
+        COV["Joseph-Form Covariance Update<br/>(Strictly Symmetric PSD P)"]
+        
+        ODO --> EKF
+        IMU --> EKF
+        GNSS --> EKF
+        EKF --> COV
     end
 
-    subgraph Est["State Estimation Subsystem"]
-        EKF["ExtendedKalmanFilter (5-State Analytical EKF)"]
-        COV["Joseph Covariance & 95% Uncertainty Ellipse"]
-        FDBK["State Feedback Selector (GT / EKF / Dead Reckoning)"]
+    %% 5. Local Control & Reactive Avoidance
+    subgraph CONTROL ["5. Local Control & Reactive Obstacle Avoidance"]
+        DWA["DWA Local Planner<br/>(Dynamic Velocity Window)"]
+        PP["Pure Pursuit Controller<br/>(Curvature-Modulated Tracking)"]
+        
+        WPM -->|"Lookahead Target"| DWA
+        WPM -->|"Lookahead Target"| PP
+        COV -->|"Estimated Pose"| DWA
+        COV -->|"Estimated Pose"| PP
+        INFLATE -->|"Obstacle Clearance"| DWA
     end
 
-    subgraph Nav["Navigation & Control Subsystem"]
-        WM["WaypointManager (Sequential Tracking & Lookahead)"]
-        CTRL["PurePursuitController (Baseline Trajectory Tracker)"]
-        DWA["DWAPlanner (Local Dynamic Collision Avoidance)"]
+    %% 6. Kinematics & Continuous Safety
+    subgraph PLANT ["6. Kinematic Plant & Continuous Collision"]
+        ROBOT["Unicycle Model<br/>(RK2 Midpoint Integration)"]
+        COLL["Continuous Swept-Disc Checker<br/>(Zero Temporal Tunneling)"]
+        
+        DWA -->|"v_cmd, omega_cmd"| ROBOT
+        PP -.->|"Fallback"| ROBOT
+        ROBOT -->|"Relative Motion Vector"| COLL
     end
 
-    subgraph Sim["Simulation & Kinematics Subsystem"]
-        ROBOT["RobotModel (True Unicycle RK2 Kinematics)"]
-        COLLISION["CollisionChecker (Circle-AABB Exact Intersection)"]
-        ENGINE["SimulationEngine (Closed-Loop Stepper)"]
+    %% 7. Telemetry & Visualization
+    subgraph TELEMETRY ["7. Telemetry & Real-Time Visualization"]
+        METRICS["Benchmark Metrics<br/>(CTE, Smoothness, RMSE)"]
+        LOGGER["Telemetry Logger<br/>(Time-Series CSV & JSON)"]
+        GUI["Pygame Interactive GUI<br/>(Live HUD & Covariance Ellipse)"]
+        
+        ROBOT --> METRICS --> LOGGER
+        ROBOT --> GUI
+        COV --> GUI
     end
-
-    subgraph Eval["Evaluation & Visualization Subsystem"]
-        METRICS["Metrics Calculator (CTE, Smoothness, RMSE, MAE)"]
-        LOGGER["SimulationLogger (Time-series & JSON Export)"]
-        PLOT["Matplotlib Visualizer (plot_map.py / perception_demo.png)"]
-        GUI["Pygame Visualizer (animate.py / HUD Dashboard / Ellipse / Fixes)"]
-    end
-
-    IMG --> PRE
-    PRE --> DET
-    DET --> ADAPT
-    CAM --> ADAPT
-    ADAPT -->|"Perceived Occupancy Updates"| MAP
-    SCENARIO --> MAP
-    SCENARIO --> DYNOBS
-    MAP --> INFLATE
-    INFLATE --> ASTAR
-    ASTAR -->|"Planned Path"| WM
-
-    ROBOT -->|"True Physical State"| SUITE
-    SUITE --> ODOM
-    SUITE --> IMU
-    SUITE --> GNSS
-    ODOM -->|"v_meas"| EKF
-    IMU -->|"omega_meas"| EKF
-    GNSS -->|"x_meas, y_meas (1 Hz)"| EKF
-    EKF --> COV
-    EKF -->|"Estimated State"| FDBK
-    ROBOT -->|"Ground Truth State"| FDBK
-
-    FDBK -->|"Feedback State (x, y, theta, v)"| WM
-    FDBK -->|"Feedback State"| CTRL
-    FDBK -->|"Feedback State"| DWA
-    WM -->|"Lookahead Sub-Goal"| CTRL
-    WM -->|"Lookahead Sub-Goal"| DWA
-    MAP -->|"Static Grid"| DWA
-    DYNOBS -->|"Predicted Trajectories"| DWA
-    CTRL -.->|"v_cmd, omega_cmd (Mode: Pure Pursuit)"| ROBOT
-    DWA -->|"v_cmd, omega_cmd (Mode: DWA)"| ROBOT
-
-    ROBOT -->|"True State"| ENGINE
-    DYNOBS -->|"Advance Obstacles"| ENGINE
-    ENGINE --> COLLISION
-    COLLISION -->|"Collision Status strictly from True Pose"| ENGINE
-    ENGINE -->|"True vs Estimated Trajectory History"| METRICS
-    ENGINE -->|"Execution History"| LOGGER
-    ENGINE -->|"Execution History"| PLOT
 ```
 
 ---
